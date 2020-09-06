@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
         {
             print("you are death");
             GetComponent<CapsuleCollider2D>().enabled = false;
-            transform.localRotation = Quaternion.Euler(0, 0, 90);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 90);
             Invoke("Lose", loseTime);// вызов проигрыша через loseTime сек
         }
 
