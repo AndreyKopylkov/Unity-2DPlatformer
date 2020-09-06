@@ -7,24 +7,42 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     public float speed; //параметр скорости
     public float jumpHeight; //высота прыжка
+    public Transform groundCheck;
+    private bool isGrounded;
+    private CapsuleCollider2D _box;
     
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        _box = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Flip();
+
+        // if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
+        //     rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
+
+        Vector3 max = _box.bounds.max;
+        Vector3 min = _box.bounds.min;
+        Vector2 corner1 = new Vector2(max.x, min.y - .1f);
+        Vector2 corner2 = new Vector2(max.x, min.y - .2f);
+        Collider2D hit = Physics2D.OverlapArea(corner1, corner2);
+
+        isGrounded = false;
+        if (hit != null)
+            isGrounded = true;
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
+            rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
     }
 
     void FixedUpdate()
     {
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, rb.velocity.y); //перемещаем персонажа по горизонатали
-        if (Input.GetKeyDown(KeyCode.Space)) //прыжок при нажатии пробела
-            rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
     }
 
     void Flip() //поворачиваем объект
@@ -34,4 +52,10 @@ public class Player : MonoBehaviour
         if (Input.GetAxis("Horizontal") < 0)
             transform.localRotation = Quaternion.Euler(0, 180, 0);
     }
+
+    // private void CheckGround() //проверка стоит герой на земле или нет
+    // {
+    //     Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f);
+    //     isGrounded = colliders.Length > 1;
+    // }
 }
