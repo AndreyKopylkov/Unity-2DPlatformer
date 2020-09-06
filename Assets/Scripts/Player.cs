@@ -10,19 +10,20 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     private bool isGrounded;
     private CapsuleCollider2D _box;
-    
+    private Animator anim;
+    private static readonly int State = Animator.StringToHash("State");
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         _box = GetComponent<CapsuleCollider2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Flip();
-
         // if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
         //     rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
 
@@ -35,6 +36,19 @@ public class Player : MonoBehaviour
         isGrounded = false;
         if (hit != null)
             isGrounded = true;
+        
+        //Переключение анимаций
+        if(Input.GetAxis("Horizontal") == 0 && isGrounded)
+            anim.SetInteger(State, 1); //покой
+        else
+        {
+            Flip(); 
+            if (isGrounded)
+                anim.SetInteger(State, 2); //ходьба
+        }
+        
+        if (isGrounded == false)
+            anim.SetInteger(State, 3); //прыжок
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
             rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
