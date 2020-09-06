@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     private CapsuleCollider2D _box;
     private Animator anim;
     private static readonly int State = Animator.StringToHash("State");
+    private int curHP; //текущее хп
+    private int maxHP = 3; //максимальное хп игрока
+    private bool isHit = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +22,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         _box = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
+        curHP = maxHP;
     }
 
     // Update is called once per frame
@@ -65,6 +69,34 @@ public class Player : MonoBehaviour
             transform.localRotation = Quaternion.Euler(0, 0, 0);
         if (Input.GetAxis("Horizontal") < 0)
             transform.localRotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    public void RecountHP(int deltaHP)
+    {
+        curHP = curHP + deltaHP;
+        print(curHP);
+        if (deltaHP < 0)
+            GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f); //меняет цвет игрока при уроне
+            StopCoroutine(OnHit());
+            isHit = true;
+            StartCoroutine(OnHit());
+        
+        if (curHP <= 0)
+            print("you are death");
+    }
+
+    IEnumerator OnHit()
+    {
+        if(isHit)
+            GetComponent<SpriteRenderer>().color = new Color(1f, GetComponent<SpriteRenderer>().color.g + 0.04f,
+                GetComponent<SpriteRenderer>().color.b + 0.04f); //меняет цвет игрока при уроне
+
+        if (GetComponent<SpriteRenderer>().color.g == 1)
+            isHit = false;
+            StopCoroutine(OnHit());
+            
+        yield return new WaitForSeconds(0.02f);
+        StartCoroutine(OnHit());
     }
 
     // private void CheckGround() //проверка стоит герой на земле или нет
