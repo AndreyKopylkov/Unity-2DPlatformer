@@ -146,7 +146,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.124076694, y: -0.13412908}
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec96c6899dc3b1043bf72b4eaf9f7680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAttacking: 1
 --- !u!114 &8833853317312642247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55995575f7ab3046b40d21b322064bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bullet: {fileID: 3261105944264586212, guid: 327e7b78370b744438279b368907b137, type: 3}
   shoot: {fileID: 8833853316534040019}
   timeShoot: 3
