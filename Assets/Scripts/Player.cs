@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     public float speed; //параметр скорости
     public float jumpHeight; //высота прыжка
-    public Transform groundCheck;
     private Transform tf;
     private bool isGrounded;
     private CapsuleCollider2D _box;
@@ -18,6 +17,9 @@ public class Player : MonoBehaviour
     private bool isHit = false;
     private float loseTime = 1f; //отсчет для перезапуска сцены
     public Main main;
+    private RaycastHit2D rayHit;
+    private float rayHitDistance = 0.6f;
+    public Transform rayHelper;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //кидаем луч для проверки столкновения снизу игрока
+        RayForDestroy();
+        
         // if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
         //     rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
 
@@ -116,6 +121,25 @@ public class Player : MonoBehaviour
     void Lose() //вызов метода другого класса
     {
         main.GetComponent<Main>().Lose();
+    }
+
+    private void RayForDestroy()
+    {
+        int layerMask = ~(LayerMask.GetMask("Player"));
+        rayHit = Physics2D.Raycast(rayHelper.position, Vector3.right, rayHitDistance, layerMask);
+        Debug.DrawRay(rayHelper.position, transform.TransformDirection(Vector3.right) * rayHitDistance, Color.yellow);
+
+        if (rayHit.collider != null)
+        {
+            //если луч попал в объект с тегом Enemy
+            if (rayHit.collider.CompareTag("Enemy"))
+            {
+                print("Попадаю во врага!!!");
+            }
+            // //если луч попал куда-то в другой объект
+            // else
+            //     Debug.Log("Путь к врагу преграждает объект: " + rayHit.collider.name);
+        }
     }
 
     // private void CheckGround() //проверка стоит герой на земле или нет
