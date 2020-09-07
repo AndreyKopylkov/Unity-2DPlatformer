@@ -6,9 +6,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private float repulsiveForce = 8f; //сила отталкивания от врага
-    private void OnCollisionEnter2D(Collision2D other)
+    public bool isAttacking = true; 
+    
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && isAttacking)
         {
             print("Hit");
             other.gameObject.GetComponent<Player>().RecountHP(-1);
