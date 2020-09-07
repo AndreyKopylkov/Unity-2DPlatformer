@@ -10,6 +10,8 @@ public class AirPatrol : MonoBehaviour
     public float speed = 1f;
     private Transform target;
     private SpriteRenderer sr;
+    private float waitTime = 2f; //время ожидания перед повторным движением
+    private bool canGo = true; //способность мухи двигаться
     
     // Start is called before the first frame update
     void Start()
@@ -22,8 +24,11 @@ public class AirPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, point1.position,
-            speed * Time.deltaTime); //движение между точками
+        if (canGo)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, point1.position,
+                speed * Time.deltaTime); //движение между точками
+        }
 
         if (gameObject.transform.position == point1.position)
         {
@@ -31,10 +36,23 @@ public class AirPatrol : MonoBehaviour
             point1 = point2;
             point2 = target;
 
+            canGo = false;
+            StartCoroutine(Waiting());
+
             if (sr.flipX)
+            {
                 sr.flipX = false;
+            }
             else
+            {
                 sr.flipX = true;
+            }
         }
+    }
+
+    IEnumerator Waiting()
+    {
+        yield return new WaitForSeconds(waitTime);
+        canGo = true;
     }
 }
