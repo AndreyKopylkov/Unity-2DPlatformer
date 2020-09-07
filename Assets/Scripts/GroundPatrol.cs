@@ -17,9 +17,9 @@ public class GroundPatrol : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        transform.Translate(Vector2.left * speed); //передвижение
+        transform.Translate(Vector2.left * speed * Time.deltaTime); //передвижение
         groundInfo = Physics2D.Raycast(groundDetect.position, Vector2.down, distanceRay); //проврка обрыва
 
         if (groundInfo.collider == false)

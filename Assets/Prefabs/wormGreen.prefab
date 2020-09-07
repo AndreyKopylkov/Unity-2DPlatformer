@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8142450640814309705}
   - component: {fileID: 8142450640814309704}
   - component: {fileID: 8142450640814309708}
+  - component: {fileID: 8153820960552394230}
   m_Layer: 0
   m_Name: wormGreen
   m_TagString: Untagged
@@ -144,6 +145,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.1
   groundDetect: {fileID: 8142450641194036201}
+--- !u!114 &8153820960552394230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142450640814309707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec96c6899dc3b1043bf72b4eaf9f7680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8142450641194036200
 GameObject:
   m_ObjectHideFlags: 0

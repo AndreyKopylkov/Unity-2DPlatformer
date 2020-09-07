@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public float speed; //параметр скорости
     public float jumpHeight; //высота прыжка
     public Transform groundCheck;
-    private Transform transform;
+    private Transform tf;
     private bool isGrounded;
     private CapsuleCollider2D _box;
     private Animator anim;
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         _box = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
-        transform = GetComponent<Transform>();
+        tf = GetComponent<Transform>();
         curHP = maxHP;
     }
 
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
             anim.SetInteger(State, 3); //прыжок
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
-            rb.AddForce(transform.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
+            rb.AddForce(tf.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
     }
 
     void FixedUpdate()
@@ -70,9 +70,9 @@ public class Player : MonoBehaviour
     void Flip() //поворачиваем объект
     {
         if (Input.GetAxis("Horizontal") > 0)
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            tf.localRotation = Quaternion.Euler(0, 0, 0);
         if (Input.GetAxis("Horizontal") < 0)
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            tf.localRotation = Quaternion.Euler(0, 180, 0);
     }
 
     public void RecountHP(int deltaHP)
@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
         {
             print("you are death");
             GetComponent<CapsuleCollider2D>().enabled = false;
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 90);
+            tf.eulerAngles = new Vector3(0, tf.eulerAngles.y, 90);
             Invoke("Lose", loseTime);// вызов проигрыша через loseTime сек
         }
 
