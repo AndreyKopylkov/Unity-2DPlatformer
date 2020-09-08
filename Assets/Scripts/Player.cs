@@ -17,10 +17,11 @@ public class Player : MonoBehaviour
     private bool isHit = false;
     private float loseTime = 1f; //отсчет для перезапуска сцены
     public Main main;
-    private float rayHitDistance = 0.6f;
+    private float rayHitDistance = 0.75f;
     public Transform rayHelper;
     private float repulsiveForce = 8f; //сила отталкивания от врага
     private bool isImmortal; //режим бессмертия (после удара или получения урона)
+    private float immortalTime = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -87,14 +88,21 @@ public class Player : MonoBehaviour
 
     public void RecountHP(int deltaHP)
     {
-        curHP = curHP + deltaHP;
-        print(curHP);
-        if (deltaHP < 0)
+        if (deltaHP < 0 && isImmortal == false)
         {
+            curHP = curHP + deltaHP;
+            StartCoroutine(ImmortalEffect());
             GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f); //меняет цвет игрока при уроне
             StopCoroutine(OnHit());
             isHit = true;
             StartCoroutine(OnHit());
+            print(curHP);
+        }
+        else
+        {
+            StartCoroutine(ImmortalEffect());
+            curHP = curHP + deltaHP;
+            print(curHP);
         }
 
         if (curHP <= 0)
@@ -162,7 +170,7 @@ public class Player : MonoBehaviour
         
         isImmortal = true;
         Debug.Log("ImmortalEffect true");
-        yield return new WaitForSecondsRealtime(0.3f);
+        yield return new WaitForSecondsRealtime(immortalTime);
         isImmortal = false;
     }
 
