@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     public float speed; //параметр скорости
-    public float jumpHeight; //высота прыжка
+    public float jumpHeight = 13; //высота прыжка
     private Transform tf;
     private bool isGrounded;
     private CapsuleCollider2D _box;
@@ -17,9 +17,10 @@ public class Player : MonoBehaviour
     private bool isHit = false;
     private float loseTime = 1f; //отсчет для перезапуска сцены
     public Main main;
-    private RaycastHit2D rayHit;
     private float rayHitDistance = 0.6f;
     public Transform rayHelper;
+    private float repulsiveForce = 8f; //сила отталкивания от врага
+    private bool isImmortal; //режим бессмертия (после удара или получения урона)
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +64,12 @@ public class Player : MonoBehaviour
         if (isGrounded == false)
             anim.SetInteger(State, 3); //прыжок
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) //прыжок при нажатии пробела
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            //прыжок при нажатии пробела
+            rb.velocity = Vector3.zero; //приравнивает скорость к нулю
             rb.AddForce(tf.up * jumpHeight, ForceMode2D.Impulse); //добовляем импульс
+        }
     }
 
     void FixedUpdate()
@@ -125,21 +130,40 @@ public class Player : MonoBehaviour
 
     private void RayForDestroy()
     {
-        int layerMask = ~(LayerMask.GetMask("Player"));
-        rayHit = Physics2D.Raycast(rayHelper.position, Vector3.right, rayHitDistance, layerMask);
-        Debug.DrawRay(rayHelper.position, transform.TransformDirection(Vector3.right) * rayHitDistance, Color.yellow);
+        RaycastHit2D rayHit;
+        int layerMask = ~(LayerMask.GetMask("Player")); //маска для всех слоев, кроме игрока
+        rayHit = Physics2D.Raycast(rayHelper.position, Vector3.right, rayHitDistance, layerMask); //луч
+        Debug.DrawRay(rayHelper.position, transform.TransformDirection(Vector3.right) * rayHitDistance,
+            Color.yellow); //проверка пуска луча
 
-        if (rayHit.collider != null)
+        if (rayHit.collider != null) //проверка столкновения луча
         {
             //если луч попал в объект с тегом Enemy
-            if (rayHit.collider.CompareTag("Enemy"))
+            if (rayHit.collider.CompareTag("Enemy")) //проверяет враг это или нет
             {
+                StartCoroutine(ImmortalEffect());
+                
+                rb.velocity = Vector3.zero;
+                rb.AddForce(transform.up * repulsiveForce, ForceMode2D.Impulse); //добовляем импульс
+                GameObject rayObject = rayHit.transform.gameObject;
+                Enemy target = rayObject.GetComponent<Enemy>();
+                target.OnDestroy(); //вызов метода на Enemy
                 print("Попадаю во врага!!!");
+                
             }
             // //если луч попал куда-то в другой объект
             // else
             //     Debug.Log("Путь к врагу преграждает объект: " + rayHit.collider.name);
         }
+    }
+
+    IEnumerator ImmortalEffect()
+    {
+        
+        isImmortal = true;
+        Debug.Log("ImmortalEffect true");
+        yield return new WaitForSecondsRealtime(0.3f);
+        isImmortal = false;
     }
 
     // private void CheckGround() //проверка стоит герой на земле или нет
