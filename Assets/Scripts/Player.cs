@@ -19,9 +19,9 @@ public class Player : MonoBehaviour
     public Main main;
     private float rayHitDistance = 0.75f;
     public Transform rayHelper;
-    private float repulsiveForce = 8f; //сила отталкивания от врага
+    private float repulsiveForce = 12f; //сила отталкивания от врага
     private bool isImmortal; //режим бессмертия (после удара или получения урона)
-    private float immortalTime = 0.5f;
+    private float immortalTime = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
                 rb.AddForce(transform.up * repulsiveForce, ForceMode2D.Impulse); //добовляем импульс
                 GameObject rayObject = rayHit.transform.gameObject;
                 Enemy target = rayObject.GetComponent<Enemy>();
-                target.OnDestroy(); //вызов метода на Enemy
+                target.ToDestroy(); //вызов метода на Enemy
                 print("Попадаю во врага!!!");
                 
             }
@@ -170,7 +170,8 @@ public class Player : MonoBehaviour
         
         isImmortal = true;
         Debug.Log("ImmortalEffect true");
-        yield return new WaitForSecondsRealtime(immortalTime);
+        yield return new WaitForSeconds(immortalTime);
+        Debug.Log("ImmortalEffect false");
         isImmortal = false;
     }
 

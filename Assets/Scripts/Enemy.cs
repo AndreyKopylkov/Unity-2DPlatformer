@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     private float repulsiveForce = 8f; //сила отталкивания от врага
     public bool isAttacking = true;
 
-    public void OnDestroy()
+    public void ToDestroy()
     {
         isAttacking = false;
         GetComponent<Animator>().SetInteger("State", 2); //Включаем анимацию смерти
