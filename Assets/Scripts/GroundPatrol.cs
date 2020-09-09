@@ -20,7 +20,7 @@ public class GroundPatrol : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector2.left * speed * Time.deltaTime); //передвижение
-        groundInfo = Physics2D.Raycast(groundDetect.position, Vector2.down, distanceRay); //проврка обрыва
+        groundInfo = Physics2D.Raycast(groundDetect.position, Vector2.down, distanceRay); //проверка обрыва
 
         if (groundInfo.collider == false)
         {
