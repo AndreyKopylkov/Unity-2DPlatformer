@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8951002179839470921}
   - component: {fileID: 8951002179839470922}
   - component: {fileID: 8951002179839470923}
-  - component: {fileID: 1221813074}
   m_Layer: 0
   m_Name: fly
   m_TagString: Untagged
@@ -149,15 +148,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAttacking: 1
---- !u!114 &1221813074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8951002179839470933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98888af6c6ffaf44960957c786d964b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
